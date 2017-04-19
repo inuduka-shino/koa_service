@@ -26,7 +26,7 @@ module.exports = {
             "error",
             "1tbs"
         ],
-        "callback-return": "error",
+        "callback-return": "off",
         "camelcase": ["warn", {"properties": "always"}],
         "capitalized-comments": "off",
         "class-methods-use-this": "error",
@@ -214,7 +214,7 @@ module.exports = {
             "single"
         ],
         "radix": "error",
-        "require-await": "error",
+        "require-await": "off",
         "require-jsdoc": "off",
         "rest-spread-spacing": "error",
         "semi": "error",
