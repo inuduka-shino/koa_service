@@ -1,4 +1,7 @@
 :TOP
-E:\scripts\koa_service\node_modules\.bin\babel-node e:\scripts\koa_service\index.js
+set "base_path=E:\scripts\koa_service"
+
+%base_path%\node_modules\.bin\babel-node %base_path%\index.js > %base_path%\log\output.log
+
 pause
 goto TOP
