@@ -3,7 +3,9 @@
 
 import Koa from 'koa';
 import http from 'http';
+import router from './apps/router.js';
 
+console.log(`router:${typeof router}`);
 const app = new Koa();
 
 // アクセスログ
@@ -31,12 +33,12 @@ app.use(async (ctx, next) => {
   }
 });
 
-// レスポンスを返す
-app.use(async (ctx) => {
-  ctx.body = 'Hello world!';
-});
 
-function createWebServer(callback, port) {
+// レスポンスを返す
+app.use(router.routes());
+app.use(router.allowedMethods());
+
+function startWebServer(callback, port) {
   return new Promise((resolve) => {
     http.createServer(callback).listen(port, () => {
       resolve({
@@ -66,7 +68,7 @@ function getLocalIpAddressList() {
   return retList;
 }
 
-createWebServer(app.callback(), 3000)
+startWebServer(app.callback(), 3000)
   .then((info) => {
     console.log(`start http service on ${info.port} port.`);
 
