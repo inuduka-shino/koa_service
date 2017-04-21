@@ -5,7 +5,6 @@ import Koa from 'koa';
 import http from 'http';
 import router from './apps/router.js';
 
-console.log(`router:${typeof router}`);
 const app = new Koa();
 
 // アクセスログ
@@ -25,9 +24,7 @@ app.use(async (ctx, next) => {
   try {
     await next();
   } catch (err) {
-    ctx.body = {
-      message: err.message
-    };
+    ctx.body = err.message;
     ctx.status = err.status || 500;
     console.log(err);
   }
