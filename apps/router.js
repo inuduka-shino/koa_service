@@ -5,7 +5,8 @@ import ECT from 'ect';
 import Router from 'koa-router';
 import path from 'path';
 
-const router = new Router(),
+const router1 = new Router(),
+      router2 = new Router(),
       renderer = new ECT({
         watch: true,
         root : path.join(__dirname, '/views')
@@ -15,8 +16,14 @@ const router = new Router(),
       };
 
 // top page
-router.get('/', (ctx) => {
+router1.get('/', (ctx) => {
   ctx.body = renderer.render('toppage.ect', data);
 });
+router2.get('/', (ctx) => {
+  ctx.body = 'router2';
+});
 
-export default router;
+export {
+  router1,
+  router2
+};
