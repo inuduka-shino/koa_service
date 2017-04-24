@@ -1,41 +1,28 @@
 /*eslint-env node */
 
-import path from 'path';
 import Koa from 'koa';
 import Router from 'koa-router';
-import ECT from 'ect';
+
+import appTop from './top.js';
 
 //const appList = [];
 
-const appTop = new Koa(),
-      appTop2 = new Koa();
+const appTop2 = new Koa();
 
-const router1 = new Router(),
-      router2 = new Router(),
-      renderer = new ECT({
-        watch: true,
-        root : path.join(__dirname, '/views')
-      }),
-      data = {
-        title : 'Hello, ECT World!'
-      };
+const router2 = new Router();
 
-  router1.get('/', (ctx) => {
-    ctx.body = renderer.render('toppage.ect', data);
-  });
-  router2.get('/', (ctx) => {
-    ctx.body = 'router2';
-  });
+router2.get('/', (ctx) => {
+  ctx.body = 'router2';
+});
 
-
-appTop.use(router1.routes());
-appTop.use(router1.allowedMethods());
 appTop2.use(router2.routes());
+
+appTop.setTitle('xxxxx');
 
 export default [
   {
     mountPoint: '/',
-    koaApp: appTop,
+    koaApp: appTop.app,
     link: '/',
     title: 'Top Page',
     comment: 'Top Page',
