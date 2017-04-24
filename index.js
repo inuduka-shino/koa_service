@@ -5,14 +5,10 @@ import http from 'http';
 
 import Koa from 'koa';
 import mount from 'koa-mount';
-import {router1, router2} from './apps/router.js';
+import applist from './apps/applist.js';
 
-//import appTop from './apps/top.js';
-//import appTop2 from './apps/top2.js';
 
-const app = new Koa(),
-      appTop = new Koa(),
-      appTop2 = new Koa();
+const app = new Koa();
 
 // アクセスログ
 app.use(async (ctx, next) => {
@@ -37,14 +33,10 @@ app.use(async (ctx, next) => {
   }
 });
 
-
-// レスポンスを返す
-appTop.use(router1.routes());
-appTop.use(router1.allowedMethods());
-appTop2.use(router2.routes());
-
-app.use(mount('/', appTop));
-app.use(mount('/app2', appTop2));
+// app mount
+applist.forEach((appInfo) => {
+  app.use(mount(appInfo.mountPoint, appInfo.koaApp));
+});
 
 function startWebServer(callback, port) {
   return new Promise((resolve) => {
