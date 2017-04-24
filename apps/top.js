@@ -9,7 +9,7 @@ const app = new Koa(),
       router = new Router();
 
 
-const setTitle = (() => {
+const setLinkList = (() => {
   const renderer = new ECT({
     watch: true,
     root : path.join(__dirname, '/views')
@@ -23,8 +23,8 @@ const setTitle = (() => {
     ctx.body = renderer.render('toppage.ect', data);
   });
 
-  return (title) => {
-    data.title = title;
+  return (linkInfoList) => {
+    data.title = 'dummy:' + linkInfoList.length;
   };
 })();
 
@@ -33,5 +33,5 @@ app.use(router.allowedMethods());
 
 export default {
    app,
-   setTitle
+   setLinkList
  };
