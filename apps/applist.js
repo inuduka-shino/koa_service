@@ -1,5 +1,5 @@
 /*eslint-env node */
-import appTop from './top.js';
+import appTop from './toppage.js';
 
 import Koa from 'koa';
 import Router from 'koa-router';

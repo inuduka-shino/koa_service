@@ -16,7 +16,7 @@ const setLinkList = (() => {
   });
 
   const data = {
-    title : 'Hello, ECT World!'
+    // title : 'Hello, ECT World!'
   };
 
   router.get('/', (ctx) => {
@@ -24,7 +24,7 @@ const setLinkList = (() => {
   });
 
   return (linkInfoList) => {
-    data.title = 'dummy:' + linkInfoList.length;
+    data.toppageLinks = linkInfoList;
   };
 })();
 
