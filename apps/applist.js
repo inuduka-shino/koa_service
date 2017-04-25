@@ -1,5 +1,6 @@
 /*eslint-env node */
 import appTop from './toppage.js';
+import appStatic from './staticlib.js';
 
 import Koa from 'koa';
 import Router from 'koa-router';
@@ -26,6 +27,27 @@ linkList.push({
   title: 'Top Page',
   comment: 'Top Page',
 });
+// Static
+mountList.push({
+  mountPoint: '/lib',
+  koaApp: appStatic,
+});
+linkList.push({
+  link: '/lib/index.html',
+  title: 'static file',
+  comment: '/lib/index.html',
+});
+linkList.push({
+  link: '/lib',
+  title: 'static file',
+  comment: '/lib',
+});
+linkList.push({
+  link: '/lib/index2',
+  title: 'static file',
+  comment: '/lib/index2',
+});
+
 // dummyPage
 mountList.push({
   mountPoint: '/test',
