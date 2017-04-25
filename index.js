@@ -1,11 +1,13 @@
 /*eslint-env node */
 /*eslint no-console: off*/
 
-import Koa from 'koa';
 import http from 'http';
-import router from './apps/router.js';
 
-console.log(`router:${typeof router}`);
+import Koa from 'koa';
+import mount from 'koa-mount';
+import applist from './apps/applist.js';
+
+
 const app = new Koa();
 
 // アクセスログ
@@ -25,18 +27,16 @@ app.use(async (ctx, next) => {
   try {
     await next();
   } catch (err) {
-    ctx.body = {
-      message: err.message
-    };
+    ctx.body = err.message;
     ctx.status = err.status || 500;
     console.log(err);
   }
 });
 
-
-// レスポンスを返す
-app.use(router.routes());
-app.use(router.allowedMethods());
+// app mount
+applist.forEach((appInfo) => {
+  app.use(mount(appInfo.mountPoint, appInfo.koaApp));
+});
 
 function startWebServer(callback, port) {
   return new Promise((resolve) => {
