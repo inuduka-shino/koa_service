@@ -9,7 +9,7 @@ const appTop2 = new Koa();
 const router2 = new Router();
 
 router2.get('/', (ctx) => {
-  ctx.body = 'router2';
+  ctx.body = 'router2!';
 });
 
 appTop2.use(router2.routes());
@@ -48,7 +48,7 @@ linkList.push({
   comment: '/lib/test/index2',
 });
 
-// dummyPage
+// dummyPage!
 mountList.push({
   mountPoint: '/test',
   koaApp: appTop2,
