@@ -33,19 +33,19 @@ mountList.push({
   koaApp: appStatic,
 });
 linkList.push({
-  link: '/lib/index.html',
+  link: '/lib/test/index.html',
   title: 'static file',
-  comment: '/lib/index.html',
+  comment: '/lib/test/index.html',
 });
 linkList.push({
-  link: '/lib',
+  link: '/lib/test',
   title: 'static file',
-  comment: '/lib',
+  comment: '/lib/test',
 });
 linkList.push({
-  link: '/lib/index2',
+  link: '/lib/test/index2',
   title: 'static file',
-  comment: '/lib/index2',
+  comment: '/lib/test/index2',
 });
 
 // dummyPage
