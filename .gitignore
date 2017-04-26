@@ -1,3 +1,9 @@
 /node_modules/
 /log/
 *.log
+/apps/
+!/apps/applist.js
+!/apps/toppage.js
+!/apps/view/toppage.ect
+!/apps/staticlib.js
+!apps/static/test/*

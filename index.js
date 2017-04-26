@@ -6,6 +6,8 @@ import http from 'http';
 import Koa from 'koa';
 import mount from 'koa-mount';
 import applist from './apps/applist.js';
+import etag from 'koa-etag';
+import conditionalGet from 'koa-conditional-get';
 
 
 const app = new Koa();
@@ -20,6 +22,13 @@ app.use(async (ctx, next) => {
 
   console.log(`${ctx.method} ${ctx.url} ${ctx.status} - ${ms}ms `);
 });
+
+// conditional-get
+app.use(conditionalGet());
+
+// add etags
+app.use(etag());
+
 
 // エラーハンドリング
 // TODO: BOOMを使ってみる
@@ -41,9 +50,7 @@ applist.forEach((appInfo) => {
 function startWebServer(callback, port) {
   return new Promise((resolve) => {
     http.createServer(callback).listen(port, () => {
-      resolve({
-        port
-      });
+      resolve({port});
     });
   });
 }

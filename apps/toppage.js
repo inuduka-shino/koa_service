@@ -15,9 +15,7 @@ const setLinkList = (() => {
     root : path.join(__dirname, '/views')
   });
 
-  const data = {
-    // title : 'Hello, ECT World!'
-  };
+  const data = {};
 
   router.get('/', (ctx) => {
     ctx.body = renderer.render('toppage.ect', data);
