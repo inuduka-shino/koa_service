@@ -1,18 +1,11 @@
 /*eslint-env node */
 import appTop from './toppage.js';
 import appStatic from './staticlib.js';
+import appTategaki from './tategaki';
 
 import Koa from 'koa';
 import Router from 'koa-router';
 
-const appTop2 = new Koa();
-const router2 = new Router();
-
-router2.get('/', (ctx) => {
-  ctx.body = 'router2!';
-});
-
-appTop2.use(router2.routes());
 
 const linkList = [],
       mountList = [];
@@ -49,9 +42,31 @@ linkList.push({
 });
 
 // dummyPage!
+const appTest = new Koa();
+const router2 = new Router();
+
+router2.get('/', (ctx) => {
+  ctx.body = `router [${ctx.path}] !`;
+});
+router2.get('/A', (ctx) => {
+  ctx.body = `router [${ctx.path}] !`;
+});
+router2.get('B', (ctx) => {
+  // 到達しない
+  // /test/B testB
+  ctx.body = 'router B !';
+});
+router2.get('', (ctx) => {
+  // 到達しない
+  // /test test/
+  ctx.body = 'router nullString !';
+});
+
+appTest.use(router2.routes());
+
 mountList.push({
   mountPoint: '/test',
-  koaApp: appTop2,
+  koaApp: appTest,
 });
 linkList.push({
   link: '/test',
@@ -59,6 +74,16 @@ linkList.push({
   comment: 'test comment',
 });
 
+// tategaki
+mountList.push({
+  mountPoint: '/tategaki',
+  koaApp: appTategaki,
+});
+linkList.push({
+  link: '/tategaki/tategaki',
+  title: '縦書き',
+  comment: '縦書き表示',
+});
 
 appTop.setLinkList(linkList);
 

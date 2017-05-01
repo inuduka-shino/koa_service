@@ -2,6 +2,8 @@
 /*eslint no-console: off*/
 
 import http from 'http';
+import https from 'https';
+import fs from 'fs';
 
 import Koa from 'koa';
 import mount from 'koa-mount';
@@ -55,6 +57,21 @@ function startWebServer(callback, port) {
   });
 }
 
+const key =fs.readFileSync('sec/server.key'),
+      cert = fs.readFileSync('sec/server.crt');
+
+function startSecWebServer(callback, port) {
+  return new Promise((resolve) => {
+    https.createServer({
+      key,
+      cert,
+      //passphrase: '秘密鍵作成時に指定したパスフレーズ'
+    },callback).listen(port, () => {
+      resolve({port});
+    });
+  });
+}
+
 const os=require('os');
 
 function getLocalIpAddressList() {
@@ -75,7 +92,7 @@ function getLocalIpAddressList() {
   return retList;
 }
 
-startWebServer(app.callback(), 3000)
+startSecWebServer(app.callback(), 3000)
   .then((info) => {
     console.log(`start http service on ${info.port} port.`);
 

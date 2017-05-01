@@ -1,6 +1,7 @@
 /node_modules/
 /log/
 *.log
+/sec/
 /apps/
 !/apps/applist.js
 !/apps/toppage.js
