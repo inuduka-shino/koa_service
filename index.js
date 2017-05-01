@@ -12,41 +12,51 @@ import etag from 'koa-etag';
 import conditionalGet from 'koa-conditional-get';
 
 
-const app = new Koa();
+const appPub = new Koa(),
+      appSec= new Koa();
 
-// アクセスログ
-app.use(async (ctx, next) => {
-  const start = new Date();
+[appPub, appSec].forEach((app, idx)=>{
+  // アクセスログ
+  const type = ['http','https'];
 
-  await next();
+  app.use(async (ctx, next) => {
+    const stopwatch = (()=>{
+      const startTime = new Date();
 
-  const ms = new Date() - start;
+      return ()=>{
+        return new Date() - startTime;
+      };
+    })();
+    let errInfo = null;
 
-  console.log(`${ctx.method} ${ctx.url} ${ctx.status} - ${ms}ms `);
-});
+    try {
+      await next();
+    } catch (err) {
+      ctx.body = err.message;
+      ctx.status = err.status || 500;
+      errInfo = err;
+    }
 
-// conditional-get
-app.use(conditionalGet());
+    //eslint-disable-next-line max-len
+    console.log(`${type[idx]}:${ctx.method} ${ctx.url} ${ctx.status}(${ctx.message}) - ${stopwatch()}ms `);
+    if (errInfo) {
+      console.log(errInfo);
+    }
+  });
 
-// add etags
-app.use(etag());
+  // conditional-get
+  app.use(conditionalGet());
+  // add etags
+  app.use(etag());
 
-
-// エラーハンドリング
-// TODO: BOOMを使ってみる
-app.use(async (ctx, next) => {
-  try {
-    await next();
-  } catch (err) {
-    ctx.body = err.message;
-    ctx.status = err.status || 500;
-    console.log(err);
-  }
 });
 
 // app mount
 applist.forEach((appInfo) => {
-  app.use(mount(appInfo.mountPoint, appInfo.koaApp));
+  if (!appInfo.SecOnly) {
+    appPub.use(mount(appInfo.mountPoint, appInfo.koaApp));
+  }
+  appSec.use(mount(appInfo.mountPoint, appInfo.koaApp));
 });
 
 function startWebServer(callback, port) {
@@ -102,8 +112,8 @@ function getLocalIpAddressList() {
 }
 
 Promise.all([
-  startWebServer(app.callback(), 3000),
-  startSecWebServer(app.callback(), 3001)
+  startWebServer(appPub.callback(), 3000),
+  startSecWebServer(appSec.callback(), 3001)
 ]).then((infos) => {
     console.log(`start http service on ${infos[0].port} port.`);
     console.log(`start https service on ${infos[1].port} port.`);
