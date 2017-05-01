@@ -3,7 +3,7 @@
 
 import http from 'http';
 import https from 'https';
-import fs from 'fs';
+import fsp from './fs-promise.js';
 
 import Koa from 'koa';
 import mount from 'koa-mount';
@@ -57,19 +57,28 @@ function startWebServer(callback, port) {
   });
 }
 
-const key =fs.readFileSync('sec/server.key'),
-      cert = fs.readFileSync('sec/server.crt');
-
-function startSecWebServer(callback, port) {
+function startWebServerHttps(callback, port, opts) {
   return new Promise((resolve) => {
-    https.createServer({
-      key,
-      cert,
-      //passphrase: '秘密鍵作成時に指定したパスフレーズ'
-    },callback).listen(port, () => {
+    https.createServer(opts, callback).listen(port, () => {
       resolve({port});
     });
   });
+}
+async function startSecWebServer(callback, port) {
+  const [key,cert] = await Promise.all([
+      fsp.readFilePromise('sec/server.key'),
+      fsp.readFilePromise('sec/server.crt'),
+    ]),
+    info = await startWebServerHttps(
+      callback,
+      port,
+      {
+        key,
+        cert,
+      }
+    );
+
+  return info;
 }
 
 const os=require('os');
@@ -92,10 +101,12 @@ function getLocalIpAddressList() {
   return retList;
 }
 
-startSecWebServer(app.callback(), 3000)
-  .then((info) => {
-    console.log(`start http service on ${info.port} port.`);
-
+Promise.all([
+  startWebServer(app.callback(), 3000),
+  startSecWebServer(app.callback(), 3001)
+]).then((infos) => {
+    console.log(`start http service on ${infos[0].port} port.`);
+    console.log(`start https service on ${infos[1].port} port.`);
     console.log('ip address');
     getLocalIpAddressList().forEach((ipAddress) => {
       console.log(ipAddress);

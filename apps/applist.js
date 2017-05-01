@@ -78,8 +78,10 @@ linkList.push({
 mountList.push({
   mountPoint: '/tategaki',
   koaApp: appTategaki,
+  secOnly: true
 });
 linkList.push({
+  secLink: '/tategaki/tategaki',
   link: '/tategaki/tategaki',
   title: '縦書き',
   comment: '縦書き表示',
