@@ -76,8 +76,8 @@ function startWebServerHttps(callback, port, opts) {
 }
 async function startSecWebServer(callback, port) {
   const [key,cert] = await Promise.all([
-      fsp.readFilePromise('sec/server.key'),
-      fsp.readFilePromise('sec/server.crt'),
+      fsp.readFilePromise('sec/server001/server.key'),
+      fsp.readFilePromise('sec/server001/server.crt'),
     ]),
     info = await startWebServerHttps(
       callback,

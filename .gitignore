@@ -2,6 +2,8 @@
 /log/
 *.log
 /sec/
+!/sec/genSecKey.sh
+!/sec/genSecKeyCA.sh
 /apps/
 !/apps/applist.js
 !/apps/toppage.js
