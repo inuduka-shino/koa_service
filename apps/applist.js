@@ -2,6 +2,7 @@
 import appTop from './toppage.js';
 import appStatic from './staticlib.js';
 import appTategaki from './tategaki';
+import appSWTest from './sw_test';
 
 import Koa from 'koa';
 import Router from 'koa-router';
@@ -86,6 +87,18 @@ linkList.push({
   title: '縦書き',
   comment: '縦書き表示',
 });
+
+// sw test
+mountList.push({
+  mountPoint: '/sw_test',
+  koaApp: appSWTest,
+});
+linkList.push({
+  link: '/sw_test/',
+  title: 'sw test',
+  comment: 'service worker test page',
+});
+
 
 appTop.setLinkList(linkList);
 
