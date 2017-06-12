@@ -3,6 +3,7 @@ import appTop from './toppage.js';
 import appStatic from './staticlib.js';
 import appTategaki from './tategaki';
 import appSWTest from './sw_test';
+import appGHP001 from './ghp_001';
 
 import Koa from 'koa';
 import Router from 'koa-router';
@@ -21,6 +22,17 @@ linkList.push({
   title: 'Top Page',
   comment: 'Top Page',
 });
+
+mountList.push({
+  mountPoint: '/gph001',
+  koaApp: appGHP001,
+});
+linkList.push({
+  link: '/gph001',
+  title: 'ghp #001',
+  comment: 'ghp',
+});
+
 // Static
 mountList.push({
   mountPoint: '/lib',
