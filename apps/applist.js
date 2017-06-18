@@ -7,7 +7,6 @@ const appTop = require('./toppage.js'),
       appStatic = require('./staticlib.js');
 //      appTategaki = require('./tategaki.js'),
 //      appSWTest = require('./sw_test.js'),
-//      appGHP001 = require('../../gph_001');
 
 const linkList = [],
       mountList = [];
@@ -23,7 +22,8 @@ linkList.push({
   comment: 'Top Page',
 });
 
-/* gph001
+/* gph001 */
+const appGHP001 = require('../../gph_001');
 mountList.push({
   mountPoint: '/gph001',
   koaApp: appGHP001,
@@ -33,7 +33,7 @@ linkList.push({
   title: 'ghp #001',
   comment: 'ghp',
 });
-*/
+
 
 // Static
 mountList.push({
