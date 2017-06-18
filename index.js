@@ -112,10 +112,10 @@ function getLocalIpAddressList() {
 
 Promise.all([
   startWebServer(appPub.callback(), 3000),
-//startSecWebServer(appSec.callback(), 3001)
+  startSecWebServer(appSec.callback(), 3001)
 ]).then((infos) => {
     console.log(`start http service on ${infos[0].port} port.`);
-    //console.log(`start https service on ${infos[1].port} port.`);
+    console.log(`start https service on ${infos[1].port} port.`);
     console.log('ip address');
     getLocalIpAddressList().forEach((ipAddress) => {
       console.log(ipAddress);
