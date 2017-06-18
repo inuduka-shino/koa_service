@@ -2,6 +2,8 @@
 /*eslint no-console: off*/
 
 import http from 'http';
+import https from 'https';
+import fsp from './fs-promise.js';
 
 import Koa from 'koa';
 import mount from 'koa-mount';
@@ -10,41 +12,51 @@ import etag from 'koa-etag';
 import conditionalGet from 'koa-conditional-get';
 
 
-const app = new Koa();
+const appPub = new Koa(),
+      appSec= new Koa();
 
-// アクセスログ
-app.use(async (ctx, next) => {
-  const start = new Date();
+[appPub, appSec].forEach((app, idx)=>{
+  // アクセスログ
+  const type = ['http','https'];
 
-  await next();
+  app.use(async (ctx, next) => {
+    const stopwatch = (()=>{
+      const startTime = new Date();
 
-  const ms = new Date() - start;
+      return ()=>{
+        return new Date() - startTime;
+      };
+    })();
+    let errInfo = null;
 
-  console.log(`${ctx.method} ${ctx.url} ${ctx.status} - ${ms}ms `);
-});
+    try {
+      await next();
+    } catch (err) {
+      ctx.body = err.message;
+      ctx.status = err.status || 500;
+      errInfo = err;
+    }
 
-// conditional-get
-app.use(conditionalGet());
+    //eslint-disable-next-line max-len
+    console.log(`${type[idx]}:${ctx.method} ${ctx.url} ${ctx.status}(${ctx.message}) - ${stopwatch()}ms `);
+    if (errInfo) {
+      console.log(errInfo);
+    }
+  });
 
-// add etags
-app.use(etag());
+  // conditional-get
+  app.use(conditionalGet());
+  // add etags
+  app.use(etag());
 
-
-// エラーハンドリング
-// TODO: BOOMを使ってみる
-app.use(async (ctx, next) => {
-  try {
-    await next();
-  } catch (err) {
-    ctx.body = err.message;
-    ctx.status = err.status || 500;
-    console.log(err);
-  }
 });
 
 // app mount
 applist.forEach((appInfo) => {
-  app.use(mount(appInfo.mountPoint, appInfo.koaApp));
+  if (!appInfo.SecOnly) {
+    appPub.use(mount(appInfo.mountPoint, appInfo.koaApp));
+  }
+  appSec.use(mount(appInfo.mountPoint, appInfo.koaApp));
 });
 
 function startWebServer(callback, port) {
@@ -53,6 +65,30 @@ function startWebServer(callback, port) {
       resolve({port});
     });
   });
+}
+
+function startWebServerHttps(callback, port, opts) {
+  return new Promise((resolve) => {
+    https.createServer(opts, callback).listen(port, () => {
+      resolve({port});
+    });
+  });
+}
+async function startSecWebServer(callback, port) {
+  const [key,cert] = await Promise.all([
+      fsp.readFilePromise('sec/server001/server.key'),
+      fsp.readFilePromise('sec/server001/server.crt'),
+    ]),
+    info = await startWebServerHttps(
+      callback,
+      port,
+      {
+        key,
+        cert,
+      }
+    );
+
+  return info;
 }
 
 const os=require('os');
@@ -75,10 +111,12 @@ function getLocalIpAddressList() {
   return retList;
 }
 
-startWebServer(app.callback(), 3000)
-  .then((info) => {
-    console.log(`start http service on ${info.port} port.`);
-
+Promise.all([
+  startWebServer(appPub.callback(), 3000),
+  startSecWebServer(appSec.callback(), 3001)
+]).then((infos) => {
+    console.log(`start http service on ${infos[0].port} port.`);
+    console.log(`start https service on ${infos[1].port} port.`);
     console.log('ip address');
     getLocalIpAddressList().forEach((ipAddress) => {
       console.log(ipAddress);
