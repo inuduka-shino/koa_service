@@ -3,8 +3,9 @@ import appTop from './toppage.js';
 import appStatic from './staticlib.js';
 import appTategaki from './tategaki';
 import appSWTest from './sw_test';
-import appGHP001 from './ghp_001';
-
+//import appGHP001 from '../../gph_001';
+//import appGHP001 from './ghp_001';
+const appGHP001 = require('../../gph_001');
 import Koa from 'koa';
 import Router from 'koa-router';
 
