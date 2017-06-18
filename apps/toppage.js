@@ -1,9 +1,9 @@
 /*eslint-env node */
 
-import path from 'path';
-import Koa from 'koa';
-import Router from 'koa-router';
-import ECT from 'ect';
+const path = require('path'),
+      Koa = require('koa'),
+      Router = require('koa-router'),
+      ECT = require('ect');
 
 const app = new Koa(),
       router = new Router();
@@ -29,7 +29,7 @@ const setLinkList = (() => {
 app.use(router.routes());
 app.use(router.allowedMethods());
 
-export default {
+module.exports = {
    app,
    setLinkList
  };
