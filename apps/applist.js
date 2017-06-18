@@ -1,14 +1,12 @@
 /*eslint-env node */
-import appTop from './toppage.js';
-import appStatic from './staticlib.js';
-import appTategaki from './tategaki';
-import appSWTest from './sw_test';
-//import appGHP001 from '../../gph_001';
-//import appGHP001 from './ghp_001';
-const appGHP001 = require('../../gph_001');
-import Koa from 'koa';
-import Router from 'koa-router';
 
+const Koa = require('koa'),
+      Router = require('koa-router');
+
+const appTop = require('./toppage.js'),
+      appStatic = require('./staticlib.js');
+//      appTategaki = require('./tategaki.js'),
+//      appSWTest = require('./sw_test.js'),
 
 const linkList = [],
       mountList = [];
@@ -24,6 +22,8 @@ linkList.push({
   comment: 'Top Page',
 });
 
+/* gph001 */
+const appGHP001 = require('../../gph_001');
 mountList.push({
   mountPoint: '/gph001',
   koaApp: appGHP001,
@@ -33,6 +33,7 @@ linkList.push({
   title: 'ghp #001',
   comment: 'ghp',
 });
+
 
 // Static
 mountList.push({
@@ -89,6 +90,7 @@ linkList.push({
 });
 
 // tategaki
+/*
 mountList.push({
   mountPoint: '/tategaki',
   koaApp: appTategaki,
@@ -100,8 +102,9 @@ linkList.push({
   title: '縦書き',
   comment: '縦書き表示',
 });
-
+*/
 // sw test
+/*
 mountList.push({
   mountPoint: '/sw_test',
   koaApp: appSWTest,
@@ -111,8 +114,9 @@ linkList.push({
   title: 'sw test',
   comment: 'service worker test page',
 });
+*/
 
 
 appTop.setLinkList(linkList);
 
-export default mountList;
+module.exports =  mountList;

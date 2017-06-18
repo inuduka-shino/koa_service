@@ -1,16 +1,15 @@
 /*eslint-env node */
 /*eslint no-console: off*/
 
-import http from 'http';
-import https from 'https';
-import fsp from './fs-promise.js';
+const http = require('http'),
+      https = require('https'),
+      Koa = require('koa'),
+      mount = require('koa-mount'),
+      etag = require('koa-etag'),
+      conditionalGet = require('koa-conditional-get'),
 
-import Koa from 'koa';
-import mount from 'koa-mount';
-import applist from './apps/applist.js';
-import etag from 'koa-etag';
-import conditionalGet from 'koa-conditional-get';
-
+      fsp = require('./fs-promise.js'),
+      applist = require('./apps/applist.js');
 
 const appPub = new Koa(),
       appSec= new Koa();

@@ -1,5 +1,5 @@
 /*eslint-env node */
-import fs from 'fs';
+const fs=require('fs');
 
 function readFilePromise(path) {
   return new Promise((resolve, reject) => {
@@ -13,4 +13,4 @@ function readFilePromise(path) {
   });
 }
 
-export default {readFilePromise,};
+module.exports = {readFilePromise,};
