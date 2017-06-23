@@ -3,15 +3,11 @@
 const Koa = require('koa'),
       Router = require('koa-router');
 
-const appTop = require('./toppage.js'),
-      appStatic = require('./staticlib.js');
-//      appTategaki = require('./tategaki.js'),
-//      appSWTest = require('./sw_test.js'),
-
 const linkList = [],
       mountList = [];
 
 // TopPage
+const appTop = require('./toppage.js');
 mountList.push({
   mountPoint: '/',
   koaApp: appTop.app,
@@ -22,20 +18,8 @@ linkList.push({
   comment: 'Top Page',
 });
 
-/* gph001 */
-const appGHP001 = require('../../gph_001');
-mountList.push({
-  mountPoint: '/gph001',
-  koaApp: appGHP001,
-});
-linkList.push({
-  link: '/gph001',
-  title: 'ghp #001',
-  comment: 'ghp',
-});
-
-
 // Static
+appStatic = require('./staticlib.js');
 mountList.push({
   mountPoint: '/lib',
   koaApp: appStatic,
@@ -55,6 +39,44 @@ linkList.push({
   title: 'static file',
   comment: '/lib/test/index2',
 });
+
+
+/* sw-cache */
+const appSWTest = require('../../sw_test');
+mountList.push({
+  mountPoint: '/sw_test',
+  koaApp: appSWTest,
+});
+linkList.push({
+  link: '/sw_test/',
+  title: 'sw test',
+  comment: 'service worker test page',
+});
+
+/* gph001 */
+const appGHP001 = require('../../gph_001');
+mountList.push({
+  mountPoint: '/gph001',
+  koaApp: appGHP001,
+});
+linkList.push({
+  link: '/gph001/',
+  title: 'ghp #001',
+  comment: 'ghp',
+});
+
+/* gph001 */
+const appCryptpack = require('../../cryptpack/service');
+mountList.push({
+  mountPoint: '/cryptpack',
+  koaApp: appCryptpack,
+});
+linkList.push({
+  link: '/cryptpack/',
+  title: 'CryptPack',
+  comment: 'CryptPack Services',
+});
+
 
 // dummyPage!
 const appTest = new Koa();
@@ -101,18 +123,6 @@ linkList.push({
   link: '/tategaki/tategaki',
   title: '縦書き',
   comment: '縦書き表示',
-});
-*/
-// sw test
-/*
-mountList.push({
-  mountPoint: '/sw_test',
-  koaApp: appSWTest,
-});
-linkList.push({
-  link: '/sw_test/',
-  title: 'sw test',
-  comment: 'service worker test page',
 });
 */
 
