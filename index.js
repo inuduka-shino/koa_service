@@ -5,7 +5,7 @@ const http = require('http'),
       https = require('https'),
       Koa = require('koa'),
       mount = require('koa-mount'),
-      etag = require('koa-etag'),
+      //etag = require('koa-etag'),
       conditionalGet = require('koa-conditional-get'),
 
       fsp = require('./fs-promise.js'),
@@ -46,7 +46,7 @@ const appPub = new Koa(),
   // conditional-get
   app.use(conditionalGet());
   // add etags
-  app.use(etag());
+  //app.use(etag());
 
 });
 
