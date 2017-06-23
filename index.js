@@ -18,14 +18,19 @@ const appPub = new Koa(),
   // アクセスログ
   const type = ['http','https'];
 
-  app.use(async (ctx, next) => {
-    const stopwatch = (()=>{
-      const startTime = new Date();
+  function startStopWatch() {
+    const startTime = new Date();
 
-      return ()=>{
+    return {
+      startTime,
+      stop:()=>{
         return new Date() - startTime;
-      };
-    })();
+      }
+    };
+  }
+
+  app.use(async (ctx, next) => {
+    const stopwatch = startStopWatch();
     let errInfo = null;
 
     try {
@@ -37,7 +42,7 @@ const appPub = new Koa(),
     }
 
     //eslint-disable-next-line max-len
-    console.log(`${type[idx]}:${ctx.method} ${ctx.url} ${ctx.status}(${ctx.message}) - ${stopwatch()}ms `);
+    console.log(`${stopwatch.startTime.toLocaleString()} ${type[idx]}:${ctx.method} ${ctx.url} ${ctx.status}(${ctx.message}) - ${stopwatch.stop()}ms `);
     if (errInfo) {
       console.log(errInfo);
     }
