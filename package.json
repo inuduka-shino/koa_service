@@ -29,6 +29,8 @@
     "koa-etag": "^3.0.0",
     "koa-mount": "^3.0.0",
     "koa-router": "^7.2.1",
-    "koa-static": "^3.0.0"
+    "koa-static": "^3.0.0",
+    "maquette": "^2.5.2",
+    "requirejs": "^2.3.3"
   }
 }
