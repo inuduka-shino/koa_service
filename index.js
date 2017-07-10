@@ -5,8 +5,8 @@ const http = require('http'),
       https = require('https'),
       Koa = require('koa'),
       mount = require('koa-mount'),
-      //etag = require('koa-etag'),
       conditionalGet = require('koa-conditional-get'),
+      //etag = require('koa-etag'),
 
       fsp = require('./fs-promise.js'),
       applist = require('./apps/applist.js');
@@ -14,24 +14,26 @@ const http = require('http'),
 const appPub = new Koa(),
       appSec= new Koa();
 
+function startStopWatch() {
+  const startTime = new Date();
+
+  return {
+    startTime,
+    stop:()=>{
+      return new Date() - startTime;
+    }
+  };
+}
+
 [appPub, appSec].forEach((app, idx)=>{
   // アクセスログ
   const type = ['http','https'];
 
-  function startStopWatch() {
-    const startTime = new Date();
-
-    return {
-      startTime,
-      stop:()=>{
-        return new Date() - startTime;
-      }
-    };
-  }
-
+  //eslint-disable-next-line max-statements
   app.use(async (ctx, next) => {
     const stopwatch = startStopWatch();
     let errInfo = null;
+    const reqUrl = ctx.originalUrl;
 
     try {
       await next();
@@ -40,9 +42,9 @@ const appPub = new Koa(),
       ctx.status = err.status || 500;
       errInfo = err;
     }
-
     //eslint-disable-next-line max-len
-    console.log(`${stopwatch.startTime.toLocaleString()} ${type[idx]}:${ctx.method} ${ctx.url} ${ctx.status}(${ctx.message}) - ${stopwatch.stop()}ms `);
+    console.log(`${stopwatch.startTime.toLocaleString()} ${type[idx]}:${ctx.method} ${reqUrl} ${ctx.status}(${ctx.message}) - ${stopwatch.stop()}ms `);
+
     if (errInfo) {
       console.log(errInfo);
     }
@@ -52,7 +54,6 @@ const appPub = new Koa(),
   app.use(conditionalGet());
   // add etags
   //app.use(etag());
-
 });
 
 // app mount
