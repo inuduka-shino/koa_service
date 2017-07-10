@@ -72,7 +72,7 @@ mountList.push({
   koaApp: appCryptpack,
 });
 linkList.push({
-  link: '/cryptpack/',
+  link: '/cryptpack/main.html',
   title: 'CryptPack',
   comment: 'CryptPack Services',
 });
@@ -110,22 +110,6 @@ linkList.push({
   title: 'test',
   comment: 'test comment',
 });
-
-// tategaki
-/*
-mountList.push({
-  mountPoint: '/tategaki',
-  koaApp: appTategaki,
-  //secOnly: true
-});
-linkList.push({
-  //secLink: '/tategaki/tategaki',
-  link: '/tategaki/tategaki',
-  title: '縦書き',
-  comment: '縦書き表示',
-});
-*/
-
 
 appTop.setLinkList(linkList);
 
