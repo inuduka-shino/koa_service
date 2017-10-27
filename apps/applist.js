@@ -65,7 +65,7 @@ linkList.push({
   comment: 'ghp',
 });
 
-/* gph001 */
+/* cryptpack */
 const appCryptpack = require('../../cryptpack/service');
 mountList.push({
   mountPoint: '/cryptpack',
@@ -76,6 +76,18 @@ linkList.push({
   title: 'CryptPack',
   comment: 'CryptPack Services',
 });
+
+/* broklg */
+mountList.push({
+  mountPoint: '/broklog',
+  koaApp: require('../../broklg'),
+});
+linkList.push({
+  link: '/broklog/main.html',
+  title: 'Broklog',
+  comment: 'Broklog',
+});
+
 
 
 // dummyPage!
