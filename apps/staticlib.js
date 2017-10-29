@@ -7,14 +7,14 @@ const path = require('path'),
 
 const router = new Router();
 
-const servf = serv({
-  rootDir: path.join(__dirname, 'static'),
-  rootPath: '/',
-  index: 'index.html',
-  //notFoundFile: './errorfiles/notFoundFile.html',
-});
-router.get('/*',(next)=>{
-    return servf(next).catch((e) =>{
+function servf(rootdir, rootpath) {
+  return (next) => {
+    return serv({
+      rootDir: path.join(__dirname, rootdir),
+      rootPath: rootpath,
+      index: 'index.html',
+      //notFoundFile: './errorfiles/notFoundFile.html',
+    }) (next).catch((e) =>{
       if (e.code === 'ENOENT') {
         console.log('ファイルが見つかりません。');
         console.log(e);
@@ -22,7 +22,11 @@ router.get('/*',(next)=>{
       }
       return Promise.reject(e);
     });
-});
+  };
+}
+
+router.get('/common/*',servf('../../koa_service_common/static/common','/common'));
+router.get('/*',servf('static', '/'));
 
 const app = new Koa();
 
