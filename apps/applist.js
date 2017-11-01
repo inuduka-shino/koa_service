@@ -83,7 +83,7 @@ mountList.push({
   koaApp: require('../../broklg'),
 });
 linkList.push({
-  link: '/broklog/main.html',
+  link: '/broklog/',
   title: 'Broklog',
   comment: 'Broklog',
 });
